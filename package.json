@@ -6,6 +6,7 @@
   "scripts": {
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "lint": "eslint  --quiet \"src/**/*.{js,jsx}\"",
+    "dev": "parcel src/index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,8 +20,18 @@
   },
   "homepage": "https://github.com/mohaslimani/adopt-me-btholt#readme",
   "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/preset-react": "^7.12.13",
     "eslint": "^8.12.0",
     "eslint-config-prettier": "^8.5.0",
+    "parcel": "^1.12.3",
     "prettier": "^2.6.1"
-  }
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "browserslist": [
+    "last 2 Chrome versions"
+  ]
 }
