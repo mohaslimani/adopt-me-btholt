@@ -1,77 +1,65 @@
 # adopt-me-btholt
 
-<h2>npm</h2>
-<p>In order to start an npm project, run <code class="language-text">npm init</code> at the root of your project. If you don't have Node.js installed, please go install that too. When you run <code class="language-text">npm init</code> it'll ask you a bunch of questions. If you don't know the answer or don't care, just hit enter. You can always modify package.json later. This will allow us to get started installing and saving packages.</p>
+<h1>Core React Concepts</h1>
 
-<h2>Prettier</h2>
-<p>Either install Prettier globally <code class="language-text">npm install --global prettier</code> or replace when I run <code class="language-text">prettier</code> with (from the root of your project) <code class="language-text">npx prettier</code>. From there, run <code class="language-text">prettier script.js</code>. This will output the formatted version of your file. If you want to actually write the file, run <code class="language-text">prettier --write script.js</code>.</p>
-<p>Prettier is great to use with <a href="https://code.visualstudio.com/?WT.mc_id=reactintro-github-brholt">Visual Studio Code</a>. Just download <a href="https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode&amp;WT.mc_id=reactintro-github-brholt">this extension</a>. Pro tip: set it to only run Prettier when it detects a Prettier config file. Makes it so you never have to turn it off. In order to do that, set <code class="language-text">prettier.requireConfig</code> to <code class="language-text">true</code> and <code class="language-text">editor.formatOnSave</code> to true.</p>
-<p>So that our tool can know this is a Prettier project, we're going to create a file called <code class="language-text">.prettierrc</code> and put <code class="language-text">{}</code> in it. This lets everyone know this is a Prettier project that uses the default configuration. You can put other configs here if you hold strong formatting opinions.</p>
-<p>First run <code class="language-text">npm install -D prettier</code>. <code class="language-text">-D</code> means it's for development only.</p>
-<pre class="language-json"><code class="language-json"><span class="token property">"scripts"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-	<span class="token property">"format"</span><span class="token operator">:</span> <span class="token string">"prettier --write \"src/**/*.{js,jsx}\""</span>
-<span class="token punctuation">}</span><span class="token punctuation">,</span></code></pre>
-<p>Now you can run <code class="language-text">yarn format</code> or <code class="language-text">npm run format</code> and it will run that command.</p>
+<h2>JSX</h2>
+<p>If I write <code class="language-text">React.createElement("h1", { id: "main-title" }, "My Website");</code>, what am I actually trying to have rendered out? <code class="language-text">&lt;h1 id="main-title"&gt;My Website&lt;/h1&gt;</code>, right? What JSX tries to do is to shortcut this translation layer in your brain so you can just write what you mean. Let's convert Pet.js to using JSX. It will look like this:</p>
+<p>Notice we have Pet as a component. Notice that the <code class="language-text">P</code> in <code class="language-text">Pet</code> is capitalized. It <em>must</em> be. If you make it lowercase, it will try to have <code class="language-text">pet</code> as a web component and not a React component.</p>
+<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// delete the import</span>
 
-<h2>ESlint</h2>
-<p>On top of Prettier which takes of all the formatting, you may want to enforce some code styles which pertain more to usage.</p>
-<p>First of all, run <code class="language-text">npm install -D eslint eslint-config-prettier</code> to install eslint in your project development dependencies. Then you may configure its functionalities.</p>
-<p>There are dozens of preset configs for ESLint and you're welcome to use any one of them. The <a href="https://github.com/airbnb/javascript">Airbnb config</a> is very popular,I'm going to use a looser one for this class: <code class="language-text">eslint:recommended</code>. Let's create an <code class="language-text">.eslintrc.json</code> file to start linting our project.</p>
-<div class="gatsby-highlight" data-language="json"><pre class="language-json"><code class="language-json"><span class="token property">"lint"</span><span class="token operator">:</span> <span class="token string">"eslint \"src/**/*.{js,jsx}\" --quiet"</span><span class="token punctuation">,</span></code></pre></div>
-<p>Worth adding three things here:</p>
+<span class="token keyword">const</span> <span class="token function-variable function">Pet</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">props</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token operator">&lt;</span>div<span class="token operator">&gt;</span>
+      <span class="token operator">&lt;</span>h1<span class="token operator">&gt;</span><span class="token punctuation">{</span>props<span class="token punctuation">.</span>name<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>h1<span class="token operator">&gt;</span>
+      <span class="token operator">&lt;</span>h2<span class="token operator">&gt;</span><span class="token punctuation">{</span>props<span class="token punctuation">.</span>animal<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>h2<span class="token operator">&gt;</span>
+      <span class="token operator">&lt;</span>h2<span class="token operator">&gt;</span><span class="token punctuation">{</span>props<span class="token punctuation">.</span>breed<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>h2<span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">&gt;</span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> Pet<span class="token punctuation">;</span></code></pre></div>
+
+<h2>ESLint + React</h2>
+<p>We need to give ESLint a hand to get it to recognize React and not yell about React not being used. Right now it thinks we're importing React and not using because it doesn't know what to do with React. Let's help it.</p>
+<p>Run this: <code class="language-text">npm install -D eslint-plugin-import@2.22.1 eslint-plugin-jsx-a11y@6.4.1 eslint-plugin-react@7.22.0</code></p>
+<p>Update your .eslintrc.json to:</p>
+<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token punctuation">{</span>
+  <span class="token string-property property">"extends"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"eslint:recommended"</span><span class="token punctuation">,</span>
+    <span class="token string">"plugin:import/errors"</span><span class="token punctuation">,</span>
+    <span class="token string">"plugin:react/recommended"</span><span class="token punctuation">,</span>
+    <span class="token string">"plugin:jsx-a11y/recommended"</span><span class="token punctuation">,</span>
+    <span class="token string">"prettier"</span><span class="token punctuation">,</span>
+    <span class="token string">"prettier/react"</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"rules"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token string-property property">"react/prop-types"</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token string-property property">"react/react-in-jsx-scope"</span><span class="token operator">:</span> <span class="token number">0</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"plugins"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"react"</span><span class="token punctuation">,</span> <span class="token string">"import"</span><span class="token punctuation">,</span> <span class="token string">"jsx-a11y"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"parserOptions"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token string-property property">"ecmaVersion"</span><span class="token operator">:</span> <span class="token number">2021</span><span class="token punctuation">,</span>
+    <span class="token string-property property">"sourceType"</span><span class="token operator">:</span> <span class="token string">"module"</span><span class="token punctuation">,</span>
+    <span class="token string-property property">"ecmaFeatures"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token string-property property">"jsx"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"env"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token string-property property">"es6"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token string-property property">"browser"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token string-property property">"node"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token string-property property">"settings"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token string-property property">"react"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token string-property property">"version"</span><span class="token operator">:</span> <span class="token string">"detect"</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></div>
 <ul>
-<li>With npm scripts, you can pass additional parameters to the command if you want. Just add a <code class="language-text">--</code> and then put whatever else you want to tack on after that. For example, if I wanted to get the debug output from ESLint, I could run <code class="language-text">npm run lint -- --debug</code> which would translate to <code class="language-text">eslint **/*.js --debug</code>.</li>
-<li>We can use our fix trick this way: <code class="language-text">npm run lint -- --fix</code>.</li>
-<li>We're going to both JS and JSX.</li>
+<li>The import plugin helps ESLint catch commons bugs around imports, exports, and modules in general</li>
+<li>jsx-a11y catches many bugs around accessibility that can accidentally arise using React, like not having an <code class="language-text">alt</code> attribute on an <code class="language-text">img</code> tag.</li>
+<li>react is mostly common React bugs like not calling one of your props children.</li>
+<li><code class="language-text">eslint-plugin-react</code> now requires you to inform of it what version of React you're using. We're telling it here to look at the package.json to figure it out.</li>
+<li><code class="language-text">"react/react-in-jsx-scope": 0</code> is new since you used to have to import React everywhere but now with the recent revision of React you don't need to.</li>
 </ul>
 
-<h2>Git</h2>
-<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">node_modules
-.cache/
-dist/
-.env
-.DS_Store
-coverage/
-.vscode/</code></pre></div>
-
-<h2>Parcel</h2>
-<p>Parcel is going to accept an entry point, crawl through all of its dependencies, and output a single, complete file with all of our code in it. This means we can have large applications with many files and many dependencies. It would be an unmanageable mess. Already our React app has two components in one file: App and Pet. It'd be better if these were in separate files so it'd be easier to keep track of what was where. This is where Parcel can help us.</p>
-<div class="gatsby-highlight" data-language="json"><pre class="language-json"><code class="language-json"><span class="token string">"scripts"</span> <span class="token punctuation">{</span>
-  <span class="token property">"dev"</span><span class="token operator">:</span> <span class="token string">"parcel src/index.html"</span>
-<span class="token punctuation">}</span></code></pre></div>
-<p>So how does it work? We gave the entry point, which is index.html. It then reads that index.html file and finds its dependencies, which are the two React files and the one App.js file that we linked to. It's smart enough to detect that those two React files are remote so it doesn't do anything with those, but it sees that App.js is local and so it reads it and compiles its dependencies. Right now it has no dependencies so let's fix that.</p>
-<p>First let's fix the React and ReactDOM dependencies. Right now these are coming from unpkg.com. Unpkg isn't meant to serve production traffic, nor do we want the burden of loading <em>all</em> of our future dependencies this way. Believe me, it would get messy quickly and we'd have to make a million requests to get all of them by the end (we'll install more later as we go.) Instead, it'd be better if we could pull our dependencies down from npm and include it in our bundle. Let's do that now.</p>
-<p>Run <code class="language-text">npm install react@17.0.1 react-dom@17.0.1</code>. This will pull React and ReactDOM down from npm and put it in your node_modules directory. Now instead of loading them from unpkg, we can tell Parcel to include them in your main bundle. Let's do that now.</p>
-<p>Delete the two unpkg script tags in index.html</p>
-<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// at the top, under React imports</span>
-<span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> ReactDOM <span class="token keyword">from</span> <span class="token string">"react-dom"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> Pet <span class="token keyword">from</span> <span class="token string">"./Pet"</span><span class="token punctuation">;</span>
-<span class="token comment">// remove Pet component</span></code></pre></div>
-
-<h2>Babel</h2>
-<p>At its core it is a transpilation tool: it takes that looks one way and transforms it it into a different looking set of code. One of its core uses to transform futuristic JavaScript (like ES2021) to an older version of JavaScript (like ES5 i.e. JavaScript before 2015) so that older browsers can use your newer JavaScript. Babel also handles things like JSX for us and it can handle TypeScript too.</p>
-<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> -D @babel/core@7.12.16 @babel/preset-react@7.12.13</code></pre></div>
-<p>Create a file called <code class="language-text">.babelrc</code> in your home directory and put this in there:</p>
-<div class="gatsby-highlight" data-language="json"><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
-  <span class="token property">"presets"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token punctuation">[</span>
-      <span class="token string">"@babel/preset-react"</span><span class="token punctuation">,</span>
-      <span class="token punctuation">{</span>
-        <span class="token property">"runtime"</span><span class="token operator">:</span> <span class="token string">"automatic"</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">]</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre></div>
-
-<h2>Browserslist</h2>
-<p>Babel transforms your JS code from futuristic code to code that is understandable by older browsers. Via a package called browserslist (which Parcel installed for you) you can Babel what browsers to target.</p>
-<p>Head to <a href="https://browserslist.dev">browserslist.dev</a>.</p>
-<p>Since we're targeting ourselves and this is just a dev project</p>
-<p>In your package.json, add a new top level field called <code class="language-text">browserslist</code> (notice the <code class="language-text">s</code>, browser<strong>s</strong>list):</p>
-<div class="gatsby-highlight" data-language="json"><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
-  …
-  <span class="token property">"browserslist"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token string">"last 2 Chrome versions"</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre></div>
