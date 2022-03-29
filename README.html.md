@@ -2,64 +2,40 @@
 
 <h1>Core React Concepts</h1>
 
-<h2>Hooks</h2>
-<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token function-variable function">SearchParams</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
-  <span class="token keyword">const</span> location <span class="token operator">=</span> <span class="token string">"Seattle, WA"</span><span class="token punctuation">;</span>
-  <span class="token keyword">return</span> <span class="token punctuation">(</span>
-    <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"search-params"</span><span class="token operator">&gt;</span>
-      <span class="token operator">&lt;</span>form<span class="token operator">&gt;</span>
-        <span class="token operator">&lt;</span>label htmlFor<span class="token operator">=</span><span class="token string">"location"</span><span class="token operator">&gt;</span>
-          Location
-          <span class="token operator">&lt;</span>input id<span class="token operator">=</span><span class="token string">"location"</span> value<span class="token operator">=</span><span class="token punctuation">{</span>location<span class="token punctuation">}</span> placeholder<span class="token operator">=</span><span class="token string">"Location"</span> <span class="token operator">/</span><span class="token operator">&gt;</span>
-        <span class="token operator">&lt;</span><span class="token operator">/</span>label<span class="token operator">&gt;</span>
-        <span class="token operator">&lt;</span>button<span class="token operator">&gt;</span>Submit<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">&gt;</span>
-      <span class="token operator">&lt;</span><span class="token operator">/</span>form<span class="token operator">&gt;</span>
-    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">&gt;</span>
+<h2>UseEffect</h2>
+<p>do a render of this component first so the user can see something then as soon as the render is done, then do something (the something here being an effect.) In our case, we want the user to see our UI first then we want to make a request to the API so we can that initial list of pets.</p>
+<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// change import at top</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> useEffect<span class="token punctuation">,</span> useState <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> Pet <span class="token keyword">from</span> <span class="token string">"./Pet"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// add to the other useStates inside component at top</span>
+<span class="token keyword">const</span> <span class="token punctuation">[</span>pets<span class="token punctuation">,</span> setPets<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useState</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// add inside component, beneath all the `useState` setup</span>
+<span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token function">requestPets</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// eslint-disable-line react-hooks/exhaustive-deps</span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">requestPets</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span><span class="token punctuation">(</span>
+    <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">http://pets-v2.dev-apis.com/pets?animal=</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>animal<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&amp;location=</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>location<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&amp;breed=</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>breed<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span>
   <span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> json <span class="token operator">=</span> <span class="token keyword">await</span> res<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<span class="token keyword">export</span> <span class="token keyword">default</span> SearchParams<span class="token punctuation">;</span></code></pre></div>
+  <span class="token function">setPets</span><span class="token punctuation">(</span>json<span class="token punctuation">.</span>pets<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-<h3>Why i cant modify the inputs ???</h3>
-<p>Let's think about how React works: when you type in the input, React detects that a DOM event happens. When that happens, React thinks <em>something</em> may have changed so it runs a re-render. Providing your render functions are fast, this is a very quick operation.</p>
-
-<h3>Why ClassName/htmlFor and not class/for ??</h3>
-<p>This is because <code class="language-text">class</code> is a reserved word in JS and JSX is still just JS. So instead they opted to use <code class="language-text">className</code> which is the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/className">name of the JS API</a> for interacting with class names.</p>
-
-<h3> How to enable modifying on inputs ? (re-rendering) </h3>
-<p>So if we type in our input and it re-renders, what gets out in the <code class="language-text">input</code> tag? Well, its value is tied to <code class="language-text">location</code> and nothing changed that, so it remains the same. In other words, two way data binding is <em>not</em> free in React. I say this is a feature because it makes you explicit on how you handle your data. Let's go make it work.</p>
-
-<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// in SearchParams.js</span>
-<span class="token keyword">import</span> <span class="token punctuation">{</span> useState <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
-
-<span class="token comment">// replace location</span>
-<span class="token keyword">const</span> <span class="token punctuation">[</span>location<span class="token punctuation">,</span> updateLocation<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useState</span><span class="token punctuation">(</span><span class="token string">"Seattle, WA"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// replace input</span>
-<span class="token operator">&lt;</span>input
-  id<span class="token operator">=</span><span class="token string">"location"</span>
-  value<span class="token operator">=</span><span class="token punctuation">{</span>location<span class="token punctuation">}</span>
-  placeholder<span class="token operator">=</span><span class="token string">"Location"</span>
-  onChange<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token parameter">e</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token function">updateLocation</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>target<span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">}</span>
-<span class="token operator">/</span><span class="token operator">&gt;</span><span class="token punctuation">;</span></code></pre></div>
-
-<h3>quick note:</h3>
-<p>e is the event, which in this case is change, target is the element that triggered the event, which in this case is the input, and value is the value of the input element</p>
+<span class="token comment">// in jsx, under form, inside the larger div</span>
+<span class="token punctuation">{</span>
+  pets<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">pet</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span>
+    <span class="token operator">&lt;</span>Pet name<span class="token operator">=</span><span class="token punctuation">{</span>pet<span class="token punctuation">.</span>name<span class="token punctuation">}</span> animal<span class="token operator">=</span><span class="token punctuation">{</span>pet<span class="token punctuation">.</span>animal<span class="token punctuation">}</span> breed<span class="token operator">=</span><span class="token punctuation">{</span>pet<span class="token punctuation">.</span>breed<span class="token punctuation">}</span> key<span class="token operator">=</span><span class="token punctuation">{</span>pet<span class="token punctuation">.</span>id<span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">&gt;</span>
+  <span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></div>
 
 <ul>
-<li>An <em>absolutely key</em> concept for you to grasp is hooks rely on this strict ordering. As such, <strong>do not put hooks inside if statements or loops</strong>. If you do, you'll have insane bugs that involve <code class="language-text">useState</code> returning <em>the wrong state</em>. If you see <code class="language-text">useState</code> returning the wrong piece of state, this is likely what you did.</li>
-<li>Because the previous point is so absolutely critical, the React team has provided us with a lint rule that help us not fall into that trap. That lint rule relies on us, the developers, to follow the convention of calling our hooks <code class="language-text">useXxxxxx</code>. If you're willing to do that, the lint rules will guard you from calling the hooks out of order.</li>
-<li>The argument given to <code class="language-text">useState</code> is the default value. In our case, we gave it <code class="language-text">"Seattle, WA"</code> as our default value.</li>
-<li><code class="language-text">useState</code> returns to us an array with two things in it: the current value of that state and a function to update that function. We're using a feature of JavaScript called destructuring to get both of those things out of the array.</li>
-<li>We use the <code class="language-text">updateLocation</code> function in the <code class="language-text">onChange</code> attribute of the input. Every time the input is typed into, it's going to call that function which calls <code class="language-text">updateLocation</code> with what has been typed into the input. When <code class="language-text">updateLocation</code> is called, React knows that its state has been modified and kicks off a re-render.</li>
-<li>You can make your own custom hooks; <code class="language-text">useState</code> is just one of many.</li>
+<li>We could have actually put requestPets inside of the effect but we're going to use it again here in a sec with the submit button.</li>
+<li>the <code class="language-text">[]</code> at the end of the useEffect is where you declare your data dependencies.</li>
+<li>You can instead provide which hooks to watch for changes for. In our case, we actually only want it to run once, on creation of the component, and then to not run that effect again. (we'll do searching later via clicking the submit button) You can accomplish this only-run-on-creation by providing an empty array.</li>
+<li>React wants to know <em>when</em> to run that effect again. You don't give it data dependencies, it assumes any time any hook changes that you should run the effect again. This is bad because that would mean any time setPets gets called it'd re-run render and all the hooks again. See a problem there? It'd run infinitely since requestPets calls setPets.</li>
+<li>The <code class="language-text">// eslint-disable-line react-hooks/exhaustive-deps</code> tells eslint to shut up about this one run on this one line. Why? Because eslint tries to help you with you the data dependencies rule by watching for anything that <em>could</em> change. In this case, in theory the function could change but we know it's not important. You'll end up silencing this rule a fair bit.</li>
 </ul>
-
-<p>Let's add the ESLint rule. Run <code class="language-text">npm install -D eslint-plugin-react-hooks@4.2.0</code>. Add this to ESLint:</p>
-<div class="gatsby-highlight" data-language="json"><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
-  <span class="token property">"extends"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    …
-    <span class="token string">"plugin:react-hooks/recommended"</span><span class="token punctuation">,</span>
-    …
-  <span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre></div>
