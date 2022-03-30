@@ -2,65 +2,21 @@
 
 <h1>React Capabilities</h1>
 
-<h2>React Router</h2>
-
-<p>Here if you get to http://localhost:1234/details/1 you will see the two components at the same time</p>
-<h3>Why ?</h3>
-<p>React Router does partial matches.</p>
-<p>bc the router will match first the "/" route, display it and then it will complete to match /details and display it</p>
-
-<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// at top</span>
-<span class="token keyword">import</span> <span class="token punctuation">{</span> BrowserRouter <span class="token keyword">as</span> Router<span class="token punctuation">,</span> Route <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react-router-dom"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> Details <span class="token keyword">from</span> <span class="token string">"./Details"</span><span class="token punctuation">;</span>
-
-<span class="token comment">// replace &lt;SearchParams /&gt;</span>
-<span class="token operator">&lt;</span>Router<span class="token operator">&gt;</span>
-  <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/details/:id"</span><span class="token operator">&gt;</span>
-    <span class="token operator">&lt;</span>Details <span class="token operator">/</span><span class="token operator">&gt;</span>
-  <span class="token operator">&lt;</span><span class="token operator">/</span>Route<span class="token operator">&gt;</span>
-  <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/"</span><span class="token operator">&gt;</span>
-    <span class="token operator">&lt;</span>SearchParams <span class="token operator">/</span><span class="token operator">&gt;</span>
-  <span class="token operator">&lt;</span><span class="token operator">/</span>Route<span class="token operator">&gt;</span>
-<span class="token operator">&lt;</span><span class="token operator">/</span>Router<span class="token operator">&gt;</span><span class="token punctuation">;</span></code></pre></div>
-
-<h3>How to prevent that ?</h3>
-<p>let's make it match only one path with a component called Switch.</p>
-<p>before: see that the order of your components have to be from specific(/details) to general(/), without that you ll see the "SearchParams" always, it seems like react router start matching from the top to the bottom if you are using switch react router will display the first component he matched with.! </p>
-<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// replace react-router-dom import</span>
-<span class="token keyword">import</span> <span class="token punctuation">{</span> BrowserRouter <span class="token keyword">as</span> Router<span class="token punctuation">,</span> Route<span class="token punctuation">,</span> Switch <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react-router-dom"</span><span class="token punctuation">;</span>
-
-<span class="token comment">// replace jsx</span>
-<span class="token operator">&lt;</span>div<span class="token operator">&gt;</span>
-  <span class="token operator">&lt;</span>Router<span class="token operator">&gt;</span>
-    <span class="token operator">&lt;</span>h1<span class="token operator">&gt;</span>Adopt Me<span class="token operator">!</span><span class="token operator">&lt;</span><span class="token operator">/</span>h1<span class="token operator">&gt;</span>
-    <span class="token operator">&lt;</span>Switch<span class="token operator">&gt;</span>
-      <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/details/:id"</span><span class="token operator">&gt;</span>
-        <span class="token operator">&lt;</span>Details <span class="token operator">/</span><span class="token operator">&gt;</span>
-      <span class="token operator">&lt;</span><span class="token operator">/</span>Route<span class="token operator">&gt;</span>
-      <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/"</span><span class="token operator">&gt;</span>
-        <span class="token operator">&lt;</span>SearchParams <span class="token operator">/</span><span class="token operator">&gt;</span>
-      <span class="token operator">&lt;</span><span class="token operator">/</span>Route<span class="token operator">&gt;</span>
-    <span class="token operator">&lt;</span><span class="token operator">/</span>Switch<span class="token operator">&gt;</span>
-  <span class="token operator">&lt;</span><span class="token operator">/</span>Router<span class="token operator">&gt;</span>
-<span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">&gt;</span><span class="token punctuation">;</span></code></pre></div>
-
-<h3>in Pet.js replace the anchor with link to use the singlePage property of React</h3>
-<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// at top</span>
-<span class="token keyword">import</span> <span class="token punctuation">{</span> Link <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react-router-dom"</span><span class="token punctuation">;</span>
-
-<span class="token comment">// change wrapping &lt;a&gt;</span>
-<span class="token operator">&lt;</span>Link to<span class="token operator">=</span><span class="token punctuation">{</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/details/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>id<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">}</span> className<span class="token operator">=</span><span class="token string">"pet"</span><span class="token operator">&gt;</span>
-  <span class="token punctuation">[</span>…<span class="token punctuation">]</span>
-<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">&gt;</span><span class="token punctuation">;</span></code></pre></div>
-
-<h3>useParams() Hook</h3>
-<p>we can pass the id from Pet to DEtail to display the corresponded Animal</p>
-<p>but as a best practice & because we want the user to access the specific animal directly if he puts the '/details/1' we will use UseParams that will give use the params from ReactRouter directly</p>
-<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">{</span> useParams <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react-router-dom"</span><span class="token punctuation">;</span>
-
-<span class="token keyword">const</span> <span class="token function-variable function">Details</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
-  <span class="token keyword">const</span> <span class="token punctuation">{</span> id <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">useParams</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">return</span> <span class="token operator">&lt;</span>h2<span class="token operator">&gt;</span><span class="token punctuation">{</span>id<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>h2<span class="token operator">&gt;</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
-
-<span class="token keyword">export</span> <span class="token keyword">default</span> Details<span class="token punctuation">;</span></code></pre></div>
+<h2>Class Components</h2>
+<h3>recreate details but as a class component</h3>
+<p>u dont need to change anything else</p>
+<ul>
+<li>Every class component extends <code class="language-text">React.Component</code>. Every class component must have a render method that returns some sort of JSX / markup / call to <code class="language-text">React.createElement</code>.</li>
+<li>Not every component needs to have a constructor. Many don't. I'll show you momentarily how you nearly never need to have one. In this case we need it to instantiate the state object (which we'll use instead of <code class="language-text">useState</code>.) If you have a constructor, you <em>have</em> to do the <code class="language-text">super(props)</code> to make sure that the props are passed up to React so React can keep track of them.</li>
+<li><code class="language-text">componentDidMount</code> is a function that's called after the first rendering is completed. This pretty similar to a <code class="language-text">useEffect</code> call that only calls the first time. This is typically where you want to do data fetching. It doesn't have to be async; we just made it async here to make the data fetching easy.</li>
+<li>Notice instead of getting props via parameters and state via <code class="language-text">useState</code> we're getting it from the instance variables <code class="language-text">this.state</code> and <code class="language-text">this.props</code>. This is how it works with class components. Neither one will you mutate directly.
+<ul>
+<li><code class="language-text">this.state</code> is the mutable state of the component (like useState). You'll use <code class="language-text">this.setState</code> to mutate it (don't modify it directly.)</li>
+<li><code class="language-text">this.props</code> comes from the parent component, similar to parameter given to the render functions that we pull props out of.</li>
+</ul>
+</li>
+<li><code class="language-text">withRouter()</code> is called a higher order component and is a bit of an advance concept. Basically we're composing functionality into our component via react-router. Think of <code class="language-text">useParams</code>: it mixes in functionality from react-router by calling a hook. This is how you get that custom hook behavior of mixing in library functionality with class components. Redux does this too, but otherwise it's not overly common.</li>
+</ul>
+<h2 id="other-lifecycle-methods" style="position:relative;"><a href="#other-lifecycle-methods" aria-label="other lifecycle methods permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Other lifecycle methods</h2>
+<p>This class doesn't cover all the lifecycle methods but you can imagine having different timings for different capabilities of a component can be useful. For example, if you have a set of props that come in and you need to filter those props before you display them, you can use <code class="language-text">getDerivedStateFromProps</code>. Or if you need to react to your component being removed from the DOM (like if you're subscribing to an API and you need to dispose of the subscription) you can use <code class="language-text">componentWillUnmount</code>.</p>
+<p>There are lots more you can check out in <a href="https://reactjs.org/docs/react-component.html">the React docs here</a>.</p>
