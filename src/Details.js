@@ -2,10 +2,7 @@ import { Component } from "react";
 import { withRouter } from "react-router-dom";
 
 class Details extends Component {
-  constructor() {
-    super();
-    this.state = { myLoading: true };
-  }
+  state = { myLoading: true };
 
   async componentDidMount() {
     const res = await fetch(
