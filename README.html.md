@@ -2,7 +2,24 @@
 
 <h1>Core React Concepts</h1>
 
-<h2>Component Composition</h2>
-<p>Let's make a better display for our Pets components. Make a new file called Results.js.</p>
-<p>Now go back to SearchParams.js and put this:</p>
-<p>Let's go make Pet.js look decent:</p>
+<h2>React DEv TOOLS</h2>
+<div class="lesson-content"><p>React has some really great tools to enhance your developer experience. We'll go over a few of them here.</p>
+<h2 id="node_envdevelopment" style="position:relative;"><a href="#node_envdevelopment" aria-label="node_envdevelopment permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code class="language-text">NODE_ENV=development</code></h2>
+<p>React already has a lot of developer conveniences built into it out of the box. What's better is that they automatically strip it out when you compile your code for production.</p>
+<p>So how do you get the debugging conveniences then? Well, if you're using Parcel.js, it will compile your development server with an environment variable of <code class="language-text">NODE_ENV=development</code> and then when you run <code class="language-text">parcel build &lt;entry point&gt;</code> it will automatically change that to <code class="language-text">NODE_ENV=production</code> which is how all the extra weight gets stripped out.</p>
+<p>Why is it important that we strip the debug stuff out? The dev bundle of React is quite a bit bigger and quite a bit slower than the production build. Make sure you're compiling with the correct environmental variables or your users will suffer.</p>
+<h2 id="strict-mode" style="position:relative;"><a href="#strict-mode" aria-label="strict mode permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Strict Mode</h2>
+<p>React has a new strict mode. If you wrap your app in <code class="language-text">&lt;React.StrictMode&gt;&lt;/React.StrictMode&gt;</code> it will give you additional warnings about things you shouldn't be doing. I'm not teaching you anything that would trip warnings from <code class="language-text">React.StrictMode</code> but it's good to keep your team in line and not using legacy features or things that will be soon be deprecated.</p>
+<p>Go to App.js and wrap <code class="language-text">&lt;App /&gt;</code> in the render call in <code class="language-text">&lt;StrictMode&gt;</code>.</p>
+<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// import at top</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> StrictMode <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// replace render</span>
+<span class="token function">render</span><span class="token punctuation">(</span>
+  <span class="token operator">&lt;</span>StrictMode<span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span>App <span class="token operator">/</span><span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span><span class="token operator">/</span>StrictMode<span class="token operator">&gt;</span><span class="token punctuation">,</span>
+  document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"root"</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></div>
+<h2 id="dev-tools" style="position:relative;"><a href="#dev-tools" aria-label="dev tools permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Dev Tools</h2>
+<p>React has wonderful dev tools that the core team maintains. They're available for both Chromium-based browsers and Firefox. They let you do several things like explore your React app like a DOM tree, modify state and props on the fly to test things out, tease out performance problems, and programtically manipulate components. Definitely worth downloading now.</p></div>
