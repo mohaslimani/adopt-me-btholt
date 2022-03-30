@@ -2,31 +2,40 @@
 
 <h1>React Capabilities</h1>
 
-<h2>Class Properties</h2>
-<div class="lesson"><h1>Class Properties</h1><h2></h2><div class="lesson-content"><p>The constructor is annoying. We can use something called class properties to make it a lot nicer and easier to read. Class properties are a new part of JavaScript so we need Parcel transform the code when Parcel transpiles our code. Luckily our config will do that by itself so no further changes are needed (previously we did need to.)</p>
-<p>Since we're going to take ahold of our own Babel configuration, we need to take over <em>all of it</em>. Parcel won't do it for us anymore. So install the following:</p>
-<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> i -D @babel/plugin-proposal-class-properties@7.13.0 @babel/preset-env@7.13.5 @babel/eslint-parser@7.13.4</code></pre></div>
-<p>Now modify your <code class="language-text">.babelrc</code> with the following:</p>
-<div class="gatsby-highlight" data-language="json"><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
-  <span class="token property">"presets"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token punctuation">[</span>
-      <span class="token string">"@babel/preset-react"</span><span class="token punctuation">,</span>
-      <span class="token punctuation">{</span>
-        <span class="token property">"runtime"</span><span class="token operator">:</span> <span class="token string">"automatic"</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token string">"@babel/preset-env"</span>
-  <span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token property">"plugins"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"@babel/plugin-proposal-class-properties"</span><span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre></div>
-<p>Babel's core concept is a plugin. Every one sort of a transformation it can perform is encapsulated into a plugin. Here we're including one explicitly: transform-class-properties. Then we're including a <em>preset</em> as well. A preset is just a group of plugins, grouped together for convenience. <code class="language-text">env</code> is a particularly good one you should expect to normally use.
-This will allow us too to make ESLint play nice too (Prettier handles this automatically.) Add one line to the top level of your <code class="language-text">.eslintrc.json</code>:</p>
-<div class="gatsby-highlight" data-language="json"><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
-  …
-  <span class="token property">"parser"</span><span class="token operator">:</span> <span class="token string">"@babel/eslint-parser"</span><span class="token punctuation">,</span>
-  …
-<span class="token punctuation">}</span></code></pre></div>
-<p>Now with this, we can modify Details to be as so:</p>
-<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// replace constructor</span>
-state <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token literal-property property">loading</span><span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre></div>
-<p>Loads easier to read, right?</p></div></div>
+<h2>Managing State in Class Components</h2>
+<p>Okay, so on this page, notice first we have a loading indicator (this one isn't nice looking but you could put some effort into it if you wanted.) This is a good idea while you're waiting for data to load.</p>
+<h3> See Carousel.js </h3>
+<h2>---------------------------------</h2>
+<p>Add the Carousel component to the Detail page.</p>
+<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// import at top</span>
+<span class="token keyword">import</span> Carousel <span class="token keyword">from</span> <span class="token string">"./Carousel"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// at top of Details function</span>
+<span class="token keyword">const</span> <span class="token punctuation">{</span> animal<span class="token punctuation">,</span> breed<span class="token punctuation">,</span> city<span class="token punctuation">,</span> state<span class="token punctuation">,</span> description<span class="token punctuation">,</span> name<span class="token punctuation">,</span> images <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>state<span class="token punctuation">;</span>
+
+<span class="token comment">// first component inside div.details</span>
+<span class="token operator">&lt;</span>Carousel images<span class="token operator">=</span><span class="token punctuation">{</span>images<span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">&gt;</span><span class="token punctuation">;</span></code></pre></div>
+
+<ul>
+<li>defaultProps does exactly what it sounds like: it allows you to set props that a component has by default if they're not furnished by parent. That way we don't have to do detection logic and can just assume they're always there.</li>
+</ul>
+<p>Let's make it so we can react to someone changing the photo on the carousel.</p>
+<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// add event listener</span>
+  <span class="token function-variable function">handleIndexClick</span> <span class="token operator">=</span> <span class="token parameter">event</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setState</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      <span class="token literal-property property">active</span><span class="token operator">:</span> <span class="token operator">+</span>event<span class="token punctuation">.</span>target<span class="token punctuation">.</span>dataset<span class="token punctuation">.</span>index
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token comment">// above img</span>
+<span class="token comment">// eslint-disable-next-line</span>
+
+<span class="token comment">// add to img</span>
+onClick<span class="token operator">=</span><span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span>handleIndexClick<span class="token punctuation">}</span>
+data<span class="token operator">-</span>index<span class="token operator">=</span><span class="token punctuation">{</span>index<span class="token punctuation">}</span></code></pre></div>
+<ul>
+<li>This is how you handle events in React class components. If it was keyboard handler, you'd do an onChange or onKeyUp, etc. handler.</li>
+<li>Notice that the handleIndexClick function is an arrow function. This is because we need the <code class="language-text">this</code> in <code class="language-text">handleIndexClick</code> to be the correct <code class="language-text">this</code>. An arrow function assures that because it will be the scope of where it was defined. This is common with how to deal with event handlers with class components.</li>
+<li>The data attribute comes back as a string. We want it to be a number, hence the <code class="language-text">+</code>.</li>
+<li>We're doing bad accessibility stuff. But this makes it a lot simpler for learning for now. But don't do this in production.</li>
+</ul>
