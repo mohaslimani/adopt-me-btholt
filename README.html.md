@@ -1,25 +1,66 @@
 # adopt-me-btholt
 
-<h1>Core React Concepts</h1>
+<h1>React Capabilities</h1>
 
-<h2>React DEv TOOLS</h2>
-<div class="lesson-content"><p>React has some really great tools to enhance your developer experience. We'll go over a few of them here.</p>
-<h2 id="node_envdevelopment" style="position:relative;"><a href="#node_envdevelopment" aria-label="node_envdevelopment permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><code class="language-text">NODE_ENV=development</code></h2>
-<p>React already has a lot of developer conveniences built into it out of the box. What's better is that they automatically strip it out when you compile your code for production.</p>
-<p>So how do you get the debugging conveniences then? Well, if you're using Parcel.js, it will compile your development server with an environment variable of <code class="language-text">NODE_ENV=development</code> and then when you run <code class="language-text">parcel build &lt;entry point&gt;</code> it will automatically change that to <code class="language-text">NODE_ENV=production</code> which is how all the extra weight gets stripped out.</p>
-<p>Why is it important that we strip the debug stuff out? The dev bundle of React is quite a bit bigger and quite a bit slower than the production build. Make sure you're compiling with the correct environmental variables or your users will suffer.</p>
-<h2 id="strict-mode" style="position:relative;"><a href="#strict-mode" aria-label="strict mode permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Strict Mode</h2>
-<p>React has a new strict mode. If you wrap your app in <code class="language-text">&lt;React.StrictMode&gt;&lt;/React.StrictMode&gt;</code> it will give you additional warnings about things you shouldn't be doing. I'm not teaching you anything that would trip warnings from <code class="language-text">React.StrictMode</code> but it's good to keep your team in line and not using legacy features or things that will be soon be deprecated.</p>
-<p>Go to App.js and wrap <code class="language-text">&lt;App /&gt;</code> in the render call in <code class="language-text">&lt;StrictMode&gt;</code>.</p>
-<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// import at top</span>
-<span class="token keyword">import</span> <span class="token punctuation">{</span> StrictMode <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
+<h2>React Router</h2>
 
-<span class="token comment">// replace render</span>
-<span class="token function">render</span><span class="token punctuation">(</span>
-  <span class="token operator">&lt;</span>StrictMode<span class="token operator">&gt;</span>
-    <span class="token operator">&lt;</span>App <span class="token operator">/</span><span class="token operator">&gt;</span>
-  <span class="token operator">&lt;</span><span class="token operator">/</span>StrictMode<span class="token operator">&gt;</span><span class="token punctuation">,</span>
-  document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"root"</span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></div>
-<h2 id="dev-tools" style="position:relative;"><a href="#dev-tools" aria-label="dev tools permalink" class="anchor before"><svg aria-hidden="true" focusable="false" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Dev Tools</h2>
-<p>React has wonderful dev tools that the core team maintains. They're available for both Chromium-based browsers and Firefox. They let you do several things like explore your React app like a DOM tree, modify state and props on the fly to test things out, tease out performance problems, and programtically manipulate components. Definitely worth downloading now.</p></div>
+<p>Here if you get to http://localhost:1234/details/1 you will see the two components at the same time</p>
+<h3>Why ?</h3>
+<p>React Router does partial matches.</p>
+<p>bc the router will match first the "/" route, display it and then it will complete to match /details and display it</p>
+
+<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// at top</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> BrowserRouter <span class="token keyword">as</span> Router<span class="token punctuation">,</span> Route <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react-router-dom"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> Details <span class="token keyword">from</span> <span class="token string">"./Details"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// replace &lt;SearchParams /&gt;</span>
+<span class="token operator">&lt;</span>Router<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/details/:id"</span><span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span>Details <span class="token operator">/</span><span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span><span class="token operator">/</span>Route<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/"</span><span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span>SearchParams <span class="token operator">/</span><span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span><span class="token operator">/</span>Route<span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>Router<span class="token operator">&gt;</span><span class="token punctuation">;</span></code></pre></div>
+
+<h3>How to prevent that ?</h3>
+<p>let's make it match only one path with a component called Switch.</p>
+<p>before: see that the order of your components have to be from specific(/details) to general(/), without that you ll see the "SearchParams" always, it seems like react router start matching from the top to the bottom if you are using switch react router will display the first component he matched with.! </p>
+<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// replace react-router-dom import</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> BrowserRouter <span class="token keyword">as</span> Router<span class="token punctuation">,</span> Route<span class="token punctuation">,</span> Switch <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react-router-dom"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// replace jsx</span>
+<span class="token operator">&lt;</span>div<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span>Router<span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span>h1<span class="token operator">&gt;</span>Adopt Me<span class="token operator">!</span><span class="token operator">&lt;</span><span class="token operator">/</span>h1<span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span>Switch<span class="token operator">&gt;</span>
+      <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/details/:id"</span><span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span>Details <span class="token operator">/</span><span class="token operator">&gt;</span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>Route<span class="token operator">&gt;</span>
+      <span class="token operator">&lt;</span>Route path<span class="token operator">=</span><span class="token string">"/"</span><span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span>SearchParams <span class="token operator">/</span><span class="token operator">&gt;</span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>Route<span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>Switch<span class="token operator">&gt;</span>
+  <span class="token operator">&lt;</span><span class="token operator">/</span>Router<span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">&gt;</span><span class="token punctuation">;</span></code></pre></div>
+
+<h3>in Pet.js replace the anchor with link to use the singlePage property of React</h3>
+<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// at top</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Link <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react-router-dom"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// change wrapping &lt;a&gt;</span>
+<span class="token operator">&lt;</span>Link to<span class="token operator">=</span><span class="token punctuation">{</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">/details/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>id<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">}</span> className<span class="token operator">=</span><span class="token string">"pet"</span><span class="token operator">&gt;</span>
+  <span class="token punctuation">[</span>…<span class="token punctuation">]</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>Link<span class="token operator">&gt;</span><span class="token punctuation">;</span></code></pre></div>
+
+<h3>useParams() Hook</h3>
+<p>we can pass the id from Pet to DEtail to display the corresponded Animal</p>
+<p>but as a best practice & because we want the user to access the specific animal directly if he puts the '/details/1' we will use UseParams that will give use the params from ReactRouter directly</p>
+<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">{</span> useParams <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react-router-dom"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">Details</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">{</span> id <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">useParams</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token operator">&lt;</span>h2<span class="token operator">&gt;</span><span class="token punctuation">{</span>id<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>h2<span class="token operator">&gt;</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> Details<span class="token punctuation">;</span></code></pre></div>
