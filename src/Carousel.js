@@ -6,19 +6,18 @@ class Carousel extends Component {
   static defaultProps = {
     images: ["http://pets-images.dev-apis.com/pets/none.jpg"],
   };
-  handleIndexClick = event => {
-      this.setState({
-        //  you need to think abt that man
-          active: +event.target.dataset.index
-      });
+  handleIndexClick = (event) => {
+    this.setState({
+      //  you need to think abt that man
+      active: +event.target.dataset.index,
+    });
   };
 
   render() {
     const { active } = this.state;
-    //hada ghi destruction dial l props lli ayjiw mn Details.js 
+    //hada ghi destruction dial l props lli ayjiw mn Details.js
     const { images } = this.props;
 
-    
     console.log(this.props);
     return (
       <div className="carousel">

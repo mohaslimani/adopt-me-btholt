@@ -38,3 +38,10 @@ state <span class="token operator">=</span> <span class="token punctuation">{</s
 <span class="token punctuation">}</span> <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>state<span class="token punctuation">.</span>hasError<span class="token punctuation">)</span> <span class="token punctuation">{</span>
   …
 <span class="token punctuation">}</span></code></pre></div>
+
+<ul>
+<li><code class="language-text">componentDidUpdate</code> is how you react to state and prop changes with class components. In this case we're reacting to the state changing. You're also passed the previous state and props in the paremeters (which we didn't need) in case you want to detect what changed.</li>
+<li>Rendering Redirect components is how you do redirects with React Router. You can also do it progamatically but I find this approach elegant.</li>
+</ul>
+
+<h2>i couldnt test anything here away from changing states from reactDevTools component to get the renders i want or to auto redirect the page</h2>
