@@ -1,131 +1,77 @@
 # adopt-me-btholt
 
-<p>
-  Some Notes:<br />
-  in Carousel.js<br />
-  Operator + returns a value for objects which have implemented method valueOf
-  <br />
-  here convert string to number<br />
-  <br />
-  we used the attribut data-* because it behaves like a costume attribute that
-  can be accessed with dataset.*<br />
-  in our example we have data-index that will be accessed with dataset.index<br />
-</p>
-
 <h1>Special Case React Tools</h1>
 
-<h2>Context</h2>
-<p>
-  So here we go. What is context? Context is like state, but instead of being
-  confined to a component, it's global to your application. It's
-  application-level state. This is dangerous. Avoid using context until you
-  <em>have</em> to use it.
-</p>
+<h2> Portals & Refs</h2>
+<p>You can think of the portal as a separate mount point (the actual DOM node which your app is put into) for your React app</p>
+<p>A common use case for this is going to be doing modals.</p>
+<p>A modal (also called a modal window or lightbox) is a web page element that displays in front of and deactivates all other page content. To return to the main content, the user must engage with the modal by completing an action or by closing it</p>
+<p>i like to call it a fancy pop up.</p>
+<p>You'll have your normal app with its normal mount point and then you can also put different content into a separate mount point (like a modal or a contextual nav bar) directly from a component. Pretty cool!</p>
+<h2>...</h2>
+<ol>
+<li><p>First thing, let's go into index.html and add a separate mount point:</p>
+<pre class="language-html"><code class="language-html"><span class="token comment">&lt;!-- above #root --&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>modal<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span></code></pre>
 
-<p>
-  Context (mostly) replaces Redux. Well, typically. It fills the same need as
-  Redux. I really can't see why you would need to use both. Use one or the
-  other.
-</p>
+<p>This where the modal will actually be mounted whenever we render to this portal. Totally separate from our app root.</p>
+</li>
 
-<h3>see ThemeContext.js</h3>
-
-<p>
-  <code class="language-text">createContext</code> is a function that returns an
-  object with two React components in it: <br />a Provider and a Consumer.
-</p>
-<p>
-  A Provider is how you scope where a context goes. A context will only be
-  available inside of the Provider. You only need to do this once.
-</p>
-<p>
-  A Consumer is how you consume from the above provider. A Consumer accepts a
-  function as a child and gives it the context which you can use. We won't be
-  using the Consumer directly: a function called
-  <code class="language-text">useContext</code> will do that for us.
-</p>
-
-<h3>in App.js</h3>
-<pre
-  class="language-javascript"
-><code class="language-javascript"><span class="token comment">// import useState and ThemeContext</span>
-<span class="token keyword">import</span> <span class="token punctuation">{</span> StrictMode<span class="token punctuation">,</span> useState <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> ThemeContext <span class="token keyword">from</span> <span class="token string">"./ThemeContext"</span><span class="token punctuation">;</span>
-
-<span class="token comment">// top of App function body</span>
-<span class="token keyword">const</span> theme <span class="token operator">=</span> <span class="token function">useState</span><span class="token punctuation">(</span><span class="token string">"darkblue"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// wrap the rest of the app</span>
-<span class="token operator">&lt;</span>ThemeContext<span class="token punctuation">.</span>Provider value<span class="token operator">=</span><span class="token punctuation">{</span>theme<span class="token punctuation">}</span><span class="token operator">&gt;</span><span class="token punctuation">[</span>…<span class="token punctuation">]</span><span class="token operator">&lt;</span><span class="token operator">/</span>ThemeContext<span class="token punctuation">.</span>Provider<span class="token operator">&gt;</span><span class="token punctuation">;</span></code></pre>
-
+<li><h3>in Modal.js</h3>
 <ul>
-  <li>
-    We're going to use the <code class="language-text">useState</code> hook
-    because theme is actually going to be kept track of like any other piece of
-    state: it's not any different. You can think of context like a wormhole:
-    whatever you chuck in one side of the wormhole is going to come out the
-    other side.
-  </li>
-  <li>
-    You have to wrap your app in a <code class="language-text">Provider</code>.
-    This is the mechanism by which React will notify the higher components to
-    re-render whenever our context changes. Then whatever you pass into the
-    value prop (we passed in the complete hook, the value and updater pair) will
-    exit on the other side whenever we ask for it.
-  </li>
-  <li>
-    Note that the theme will only be available <em>inside</em> of this provider.
-    So if we only wrapped the
-    <code class="language-text">&lt;Details&gt;</code> route with the Provider,
-    that context would not be available inside of
-    <code class="language-text">&lt;SearchParams /&gt;</code>.
-  </li>
-  <li>
-    Side note: if your context is <em>read only</em> (meaning it will
-    <em>never change</em>) you actually can skip wrapping your app in a
-    Provider.
-  </li>
+<li>This will mount a div and mount inside of the portal whenever the Modal is rendered and then <em>remove</em> itself whenever it's unrendered.</li>
+<li>We're using the feature of <code class="language-text">useEffect</code> that if you need to clean up after you're done (we need to remove the div once the Modal is no longer being rendered) you can return a function inside of <code class="language-text">useEffect</code> that cleans up.</li>
+<li>We're also using a ref here via the hook <code class="language-text">useRef</code>. Refs are like instance variables for function components. Whereas on a class you'd say <code class="language-text">this.myVar</code> to refer to an instance variable, with function components you can use refs. They're containers of state that live outside a function's closure state which means anytime I refer to <code class="language-text">elRef.current</code>, it's <strong>always referring to the same element</strong>. This is different from a <code class="language-text">useState</code> call because the variable returned from that <code class="language-text">useState</code> call will <strong>always refer to the state of the variable when that function was called.</strong> It seems like a weird hair to split but it's important when you have async calls and effects because that variable can change and nearly always you want the <code class="language-text">useState</code> variable, but with something like a portal it's important we always refer to the same DOM div; we don't want a lot of portals.</li>
+<li>Down at the bottom we use React's <code class="language-text">createPortal</code> to pass the children (whatever you put inside <code class="language-text">&lt;Modal&gt;&lt;/Modal&gt;</code>) to the portal div.</li>
 </ul>
+</li>
 
-<h3>in SearchParams.js</h3>
-<pre
-  class="language-javascript"
-><code class="language-javascript"><span class="token comment">// import at top</span>
-<span class="token keyword">import</span> React<span class="token punctuation">,</span> <span class="token punctuation">{</span> useState<span class="token punctuation">,</span> useEffect<span class="token punctuation">,</span> useContext <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> ThemeContext <span class="token keyword">from</span> <span class="token string">"./ThemeContext"</span><span class="token punctuation">;</span>
+<li><p>Now go to Details.js and add:</p>
+<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// at the top</span>
+<span class="token keyword">import</span> Modal <span class="token keyword">from</span> <span class="token string">"./Modal"</span><span class="token punctuation">;</span>
 
-<span class="token comment">// top of SearchParams function body</span>
-<span class="token keyword">const</span> <span class="token punctuation">[</span>theme<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useContext</span><span class="token punctuation">(</span>ThemeContext<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// add showModal</span>
+state <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token literal-property property">loading</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token literal-property property">showModal</span><span class="token operator">:</span> <span class="token boolean">false</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
-<span class="token comment">// replace button</span>
-<span class="token operator">&lt;</span>button style<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">{</span> <span class="token literal-property property">backgroundColor</span><span class="token operator">:</span> theme <span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token operator">&gt;</span>Submit<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">&gt;</span><span class="token punctuation">;</span></code></pre>
+<span class="token comment">// above render</span>
+<span class="token function-variable function">toggleModal</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setState</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token literal-property property">showModal</span><span class="token operator">:</span> <span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>state<span class="token punctuation">.</span>showModal <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function-variable function">adopt</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span>window<span class="token punctuation">.</span>location <span class="token operator">=</span> <span class="token string">"http://bit.ly/pet-adopt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
+<span class="token comment">// add showModal</span>
+<span class="token keyword">const</span> <span class="token punctuation">{</span>
+  animal<span class="token punctuation">,</span>
+  breed<span class="token punctuation">,</span>
+  city<span class="token punctuation">,</span>
+  state<span class="token punctuation">,</span>
+  description<span class="token punctuation">,</span>
+  name<span class="token punctuation">,</span>
+  images<span class="token punctuation">,</span>
+  showModal<span class="token punctuation">,</span>
+<span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>state<span class="token punctuation">;</span>
+
+<span class="token comment">// add onClick to &lt;button&gt;</span>
+<span class="token operator">&lt;</span>button onClick<span class="token operator">=</span><span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span>toggleModal<span class="token punctuation">}</span> style<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">{</span> <span class="token literal-property property">backgroundColor</span><span class="token operator">:</span> theme <span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token operator">&gt;</span>
+  Adopt <span class="token punctuation">{</span>name<span class="token punctuation">}</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">&gt;</span><span class="token punctuation">;</span>
+
+<span class="token comment">// below description</span>
+<span class="token punctuation">{</span>
+  showModal <span class="token operator">?</span> <span class="token punctuation">(</span>
+    <span class="token operator">&lt;</span>Modal<span class="token operator">&gt;</span>
+      <span class="token operator">&lt;</span>div<span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span>h1<span class="token operator">&gt;</span>Would you like to adopt <span class="token punctuation">{</span>name<span class="token punctuation">}</span><span class="token operator">?</span><span class="token operator">&lt;</span><span class="token operator">/</span>h1<span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span>div className<span class="token operator">=</span><span class="token string">"buttons"</span><span class="token operator">&gt;</span>
+          <span class="token operator">&lt;</span>button onClick<span class="token operator">=</span><span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span>adopt<span class="token punctuation">}</span><span class="token operator">&gt;</span>Yes<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">&gt;</span>
+          <span class="token operator">&lt;</span>button onClick<span class="token operator">=</span><span class="token punctuation">{</span><span class="token keyword">this</span><span class="token punctuation">.</span>toggleModal<span class="token punctuation">}</span><span class="token operator">&gt;</span>No<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">&gt;</span>
+      <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>Modal<span class="token operator">&gt;</span>
+  <span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token keyword">null</span>
+<span class="token punctuation">}</span></code></pre></div>
 <ul>
-  <li>
-    <code class="language-text">useContext</code> is how you get the context
-    data out of a given context (you can lots of various types of context in a
-    given app.)
-  </li>
+<li>We're using a simple <code class="language-text">window.location</code> redirect since we're heading off site. This is bad accessibility so you should be extra cautious when doing this. The button should be an <code class="language-text">&lt;a&gt;</code> tag but I wanted to show you how to do it. But now if you click Yes on the adopt modal it'll take you to the page when you actually can adopt a pet!</li>
+<li>Notice that despite we're rendering a whole different part of the DOM we're still referencing the state in Details.js. This is the magic of Portals. You can use state but render in different parts of the DOM. Imagine a sidebar with contextual navigation. Or a contextual footer. It opens up a lot of cool possibilities.</li>
 </ul>
+</li>
 
-<h3>in Details.js</h3>
-
-<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// import</span>
-<span class="token keyword">import</span> ThemeContext <span class="token keyword">from</span> <span class="token string">"./ThemeContext"</span><span class="token punctuation">;</span>
-
-<span class="token comment">// replace button</span>
-<span class="token operator">&lt;</span>ThemeContext<span class="token punctuation">.</span>Consumer<span class="token operator">&gt;</span>
-  <span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">[</span>theme<span class="token punctuation">]</span></span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span>
-    <span class="token operator">&lt;</span>button style<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">{</span> <span class="token literal-property property">backgroundColor</span><span class="token operator">:</span> theme <span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token operator">&gt;</span>Adopt <span class="token punctuation">{</span>name<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">&gt;</span>
-  <span class="token punctuation">)</span><span class="token punctuation">}</span>
-<span class="token operator">&lt;</span><span class="token operator">/</span>ThemeContext<span class="token punctuation">.</span>Consumer<span class="token operator">&gt;</span><span class="token punctuation">;</span></code></pre></div>
-
-<ul>
-<li>This is how you use context inside of a class component.</li>
-<li>Remember you cannot use hooks inside class components at all. This is why we're using the <code class="language-text">Consumer</code> from <code class="language-text">ThemeContext</code>. Functionally this works the same way though.</li>
-</ul>
-
-
-<h3>now inside searchParams.js add a select option for 4 possible themes. </h3>
-<h4> !important </h4>
-<li>You can have multiple layers of context. If I wrapped SearchParams in its own <code class="language-text">Provider</code> (in addition to the one that already exists), the SearchParams context would read from that because it's the closest one whereas Details would read from the top level one because it's the only one.</li>
+</ol>
