@@ -1,47 +1,131 @@
 # adopt-me-btholt
 
+<p>
+  Some Notes:<br />
+  in Carousel.js<br />
+  Operator + returns a value for objects which have implemented method valueOf
+  <br />
+  here convert string to number<br />
+  <br />
+  we used the attribut data-* because it behaves like a costume attribute that
+  can be accessed with dataset.*<br />
+  in our example we have data-index that will be accessed with dataset.index<br />
+</p>
+
 <h1>Special Case React Tools</h1>
 
-<h2>Error Boundaries</h2>
-<p>CAtching Errors</p>
-<p>This will also catch 404s on our API if someone give it an invalid ID!</p>
-<p>A component can only catch errors in its children, so that's important to keep in mind. It cannot catch its own errors. Let's go make a wrapper to use on Details.js. Make a new file called ErrorBoundary.js</p>
-<p>see ErrorBoundary.js</p>
+<h2>Context</h2>
+<p>
+  So here we go. What is context? Context is like state, but instead of being
+  confined to a component, it's global to your application. It's
+  application-level state. This is dangerous. Avoid using context until you
+  <em>have</em> to use it.
+</p>
+
+<p>
+  Context (mostly) replaces Redux. Well, typically. It fills the same need as
+  Redux. I really can't see why you would need to use both. Use one or the
+  other.
+</p>
+
+<h3>see ThemeContext.js</h3>
+
+<p>
+  <code class="language-text">createContext</code> is a function that returns an
+  object with two React components in it: <br />a Provider and a Consumer.
+</p>
+<p>
+  A Provider is how you scope where a context goes. A context will only be
+  available inside of the Provider. You only need to do this once.
+</p>
+<p>
+  A Consumer is how you consume from the above provider. A Consumer accepts a
+  function as a child and gives it the context which you can use. We won't be
+  using the Consumer directly: a function called
+  <code class="language-text">useContext</code> will do that for us.
+</p>
+
+<h3>in App.js</h3>
+<pre
+  class="language-javascript"
+><code class="language-javascript"><span class="token comment">// import useState and ThemeContext</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> StrictMode<span class="token punctuation">,</span> useState <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> ThemeContext <span class="token keyword">from</span> <span class="token string">"./ThemeContext"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// top of App function body</span>
+<span class="token keyword">const</span> theme <span class="token operator">=</span> <span class="token function">useState</span><span class="token punctuation">(</span><span class="token string">"darkblue"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// wrap the rest of the app</span>
+<span class="token operator">&lt;</span>ThemeContext<span class="token punctuation">.</span>Provider value<span class="token operator">=</span><span class="token punctuation">{</span>theme<span class="token punctuation">}</span><span class="token operator">&gt;</span><span class="token punctuation">[</span>…<span class="token punctuation">]</span><span class="token operator">&lt;</span><span class="token operator">/</span>ThemeContext<span class="token punctuation">.</span>Provider<span class="token operator">&gt;</span><span class="token punctuation">;</span></code></pre>
+
 <ul>
-<li>Now anything that is a child of this component will have errors caught here. Think of this like a catch block from try/catch.</li>
-<li>A static method is one that can be called on the constructor. You'd call this method like this: <code class="language-text">ErrorBoundary.getDerivedStateFromError(error)</code>. This method must be static.</li>
-<li>If you want to call an error logging service, <code class="language-text">componentDidCatch</code> would be an amazing place to do that. I can recommend <a href="https://azure.microsoft.com/en-us/services/monitor/?WT.mc_id=reactintro-github-brholt">Azure Monitor</a>, <a href="https://sentry.io/">Sentry</a>, and <a href="https://trackjs.com/">TrackJS</a>.</li>
+  <li>
+    We're going to use the <code class="language-text">useState</code> hook
+    because theme is actually going to be kept track of like any other piece of
+    state: it's not any different. You can think of context like a wormhole:
+    whatever you chuck in one side of the wormhole is going to come out the
+    other side.
+  </li>
+  <li>
+    You have to wrap your app in a <code class="language-text">Provider</code>.
+    This is the mechanism by which React will notify the higher components to
+    re-render whenever our context changes. Then whatever you pass into the
+    value prop (we passed in the complete hook, the value and updater pair) will
+    exit on the other side whenever we ask for it.
+  </li>
+  <li>
+    Note that the theme will only be available <em>inside</em> of this provider.
+    So if we only wrapped the
+    <code class="language-text">&lt;Details&gt;</code> route with the Provider,
+    that context would not be available inside of
+    <code class="language-text">&lt;SearchParams /&gt;</code>.
+  </li>
+  <li>
+    Side note: if your context is <em>read only</em> (meaning it will
+    <em>never change</em>) you actually can skip wrapping your app in a
+    Provider.
+  </li>
+</ul>
+
+<h3>in SearchParams.js</h3>
+<pre
+  class="language-javascript"
+><code class="language-javascript"><span class="token comment">// import at top</span>
+<span class="token keyword">import</span> React<span class="token punctuation">,</span> <span class="token punctuation">{</span> useState<span class="token punctuation">,</span> useEffect<span class="token punctuation">,</span> useContext <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> ThemeContext <span class="token keyword">from</span> <span class="token string">"./ThemeContext"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// top of SearchParams function body</span>
+<span class="token keyword">const</span> <span class="token punctuation">[</span>theme<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useContext</span><span class="token punctuation">(</span>ThemeContext<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// replace button</span>
+<span class="token operator">&lt;</span>button style<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">{</span> <span class="token literal-property property">backgroundColor</span><span class="token operator">:</span> theme <span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token operator">&gt;</span>Submit<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">&gt;</span><span class="token punctuation">;</span></code></pre>
+
+<ul>
+  <li>
+    <code class="language-text">useContext</code> is how you get the context
+    data out of a given context (you can lots of various types of context in a
+    given app.)
+  </li>
 </ul>
 
 <h3>in Details.js</h3>
-<ul>
-<li>Now this is totally self contained. No one rendering Details has to know that it has its own error boundary. I'll let you decide if you like this pattern or if you would have preferred doing this in App.js at the Router level. Differing opinions exist.</li>
-<li>We totally could have made ErrorBoundary a bit more flexible and made it able to accept a component to display in cases of errors. In general I recommend the "WET" code rule (as opposed to <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">DRY</a>, lol): Write Everything Twice (or I even prefer Write Everything Thrice). In this case, we have one use case for this component, so I won't spend the extra time to make it flexible. If I used it again, I'd make it work for both of those use cases, but not <em>every</em> use case. On the third or fourth time, I'd then go back and invest the time to make it flexible.</li>
-</ul>
-<p>Let's make it redirect automatically after five seconds. We could do a set timeout in the <code class="language-text">componentDidCatch</code> but let's do it with <code class="language-text">componentDidUpdate</code> to show you how that works.</p>
-<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// top</span>
-<span class="token keyword">import</span> <span class="token punctuation">{</span> Link<span class="token punctuation">,</span> Redirect <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react-router-dom"</span><span class="token punctuation">;</span>
 
-<span class="token comment">// add redirect</span>
-state <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token literal-property property">hasError</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token literal-property property">redirect</span><span class="token operator">:</span> <span class="token boolean">false</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<div class="gatsby-highlight" data-language="javascript"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// import</span>
+<span class="token keyword">import</span> ThemeContext <span class="token keyword">from</span> <span class="token string">"./ThemeContext"</span><span class="token punctuation">;</span>
 
-<span class="token comment">// under componentDidCatch</span>
-<span class="token function">componentDidUpdate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>state<span class="token punctuation">.</span>hasError<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setState</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token literal-property property">redirect</span><span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-<span class="token comment">// first thing inside render</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>state<span class="token punctuation">.</span>redirect<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  <span class="token keyword">return</span> <span class="token operator">&lt;</span>Redirect to<span class="token operator">=</span><span class="token string">"/"</span> <span class="token operator">/</span><span class="token operator">&gt;</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span> <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>state<span class="token punctuation">.</span>hasError<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  …
-<span class="token punctuation">}</span></code></pre></div>
+<span class="token comment">// replace button</span>
+<span class="token operator">&lt;</span>ThemeContext<span class="token punctuation">.</span>Consumer<span class="token operator">&gt;</span>
+  <span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">[</span>theme<span class="token punctuation">]</span></span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span>
+    <span class="token operator">&lt;</span>button style<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">{</span> <span class="token literal-property property">backgroundColor</span><span class="token operator">:</span> theme <span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token operator">&gt;</span>Adopt <span class="token punctuation">{</span>name<span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">&gt;</span>
+  <span class="token punctuation">)</span><span class="token punctuation">}</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>ThemeContext<span class="token punctuation">.</span>Consumer<span class="token operator">&gt;</span><span class="token punctuation">;</span></code></pre></div>
 
 <ul>
-<li><code class="language-text">componentDidUpdate</code> is how you react to state and prop changes with class components. In this case we're reacting to the state changing. You're also passed the previous state and props in the paremeters (which we didn't need) in case you want to detect what changed.</li>
-<li>Rendering Redirect components is how you do redirects with React Router. You can also do it progamatically but I find this approach elegant.</li>
+<li>This is how you use context inside of a class component.</li>
+<li>Remember you cannot use hooks inside class components at all. This is why we're using the <code class="language-text">Consumer</code> from <code class="language-text">ThemeContext</code>. Functionally this works the same way though.</li>
 </ul>
 
-<h2>i couldnt test anything here away from changing states from reactDevTools component to get the renders i want or to auto redirect the page</h2>
+
+<h3>now inside searchParams.js add a select option for 4 possible themes. </h3>
+<h4> !important </h4>
+<li>You can have multiple layers of context. If I wrapped SearchParams in its own <code class="language-text">Provider</code> (in addition to the one that already exists), the SearchParams context would read from that because it's the closest one whereas Details would read from the top level one because it's the only one.</li>

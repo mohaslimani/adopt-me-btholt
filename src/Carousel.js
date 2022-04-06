@@ -8,9 +8,11 @@ class Carousel extends Component {
   };
   handleIndexClick = (event) => {
     this.setState({
-      //  you need to think abt that man
+      //Operator + returns a value for objects which have implemented method valueOf
+      //here convert string to number
       active: +event.target.dataset.index,
     });
+    console.log(event);
   };
 
   render() {
@@ -30,6 +32,7 @@ class Carousel extends Component {
               src={photo}
               className={index === active ? "activate" : ""}
               alt="animal thumbnail"
+              // data-* attributes allow us to store extra information on standard, semantic HTML elements without other hacks such as non-standard attributes, or extra properties on DOM.
               data-index={index}
               onClick={this.handleIndexClick}
             />
